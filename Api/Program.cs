@@ -15,7 +15,9 @@ builder.Services.AddSwaggerGen();
 //this way
 builder.Services.AddDbContext<HouseDbContext>(o => 
     o.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
-  
+
+builder.Services.AddScoped<IHouseRepository, HouseRepository>();
+//builder.Services.AddScoped<IBidRepository, BidRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -28,9 +30,12 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 //Now we will access the HouseDBContext. The DI container 
-//will provide an instance for me
-app.MapGet("/houses", (HouseDbContext dbContext) =>
-   dbContext.Houses); //this means access the Houses property
+//will provide an instance for me. We use the Interface instead of the 
+//concrete HouseRepository because our repo will not be dependent 
+//on a specific database. No need to "await the task". That will be 
+//handled by the framework
+app.MapGet("/houses", (IHouseRepository repo) =>
+   repo.GetAll()); //this means access the Houses property
                       //of the HouseDbContext which contains a collection 
                       //HousesEntity. It will be automatically serialized to JSON
  

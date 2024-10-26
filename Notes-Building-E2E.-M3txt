@@ -118,5 +118,15 @@ Module 3: Getting and Displaying Data
         - do a dotnet run --> go to localhost:4000/houses 
           (affix houses to the URL). You should get a list of houses
 
+  3. Separation of Concerns:
+       - create a folder called Dtos
 
-          
+       - create HouseDto  under api/Dtos folder 
+
+       - create HouseRepository.cs folder api/data 
+
+       - then register HouseRepository in DI container in Program.cs then change the App.MapGet to:
+          app.MapGet("/houses", (IHouseRepository repo) => repo.GetAll()); 
+
+      -  - do a dotnet run --> go to localhost:4000/houses 
+          (affix houses to the URL). You should get a list of houses
